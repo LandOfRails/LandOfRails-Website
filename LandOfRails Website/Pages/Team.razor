@@ -1,0 +1,52 @@
+﻿@page "/team"
+@using Discord.WebSocket
+@using LandOfRails_Website.Services
+<!-- Start: Team Boxed -->
+<section class="team-boxed">
+    <div class="container">
+        <!-- Start: Intro -->
+        <div class="intro">
+            <h2 class="text-center">Team </h2>
+            <p class="text-center">Eine Übersicht von all unseren lieben Teammitgliedern</p>
+        </div><!-- End: Intro -->
+        <!-- Start: People -->
+        <div class="row people">
+            @if (teamMembers != null)
+            {
+                @foreach (SocketGuildUser user in teamMembers)
+                {
+                    <div class="col-md-6 col-lg-4 item">
+                        <div class="box">
+                            <img class="rounded-circle" src="@(string.IsNullOrWhiteSpace(user.GetAvatarUrl()) ? user.GetDefaultAvatarUrl() : user.GetAvatarUrl())">
+                            @if (string.IsNullOrWhiteSpace(user.Nickname))
+                            {
+                                <h3 class="name">@user.Username</h3>
+                            }
+                            else
+                            {
+                                <h3 class="name">@user.Nickname</h3>
+                            }
+                            <p class="title">@user.Status</p>
+                            @if (user.Activity != null)
+                            {
+                                <p class="description">@user.Activity.Name</p>
+                            }
+                            @*<div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>*@
+                        </div>
+                    </div>
+                }
+            }
+        </div><!-- End: People -->
+    </div>
+</section><!-- End: Team Boxed -->
+
+@code {
+
+    List<SocketGuildUser> teamMembers;
+
+    protected override void OnInitialized()
+    {
+        teamMembers = TeamHandlingService.GetTeamMembers();
+        base.OnInitialized();
+    }
+}

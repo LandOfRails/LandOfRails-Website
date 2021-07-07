@@ -21,8 +21,7 @@ namespace LandOfRails_Website
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
-            new Program().MainAsync().GetAwaiter().GetResult();
+            new Program().MainAsync(args).GetAwaiter().GetResult();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -32,7 +31,7 @@ namespace LandOfRails_Website
                     webBuilder.UseStartup<Startup>();
                 });
 
-        public async Task MainAsync()
+        public async Task MainAsync(string[] args)
         {
             var token = await File.ReadAllLinesAsync("Sensitive-data");
             await using var services = ConfigureServices();
@@ -46,6 +45,7 @@ namespace LandOfRails_Website
 
             services.GetRequiredService<TeamHandlingService>().Register();
 
+            await CreateHostBuilder(args).Build().RunAsync();
             await Task.Delay(Timeout.Infinite);
         }
 
