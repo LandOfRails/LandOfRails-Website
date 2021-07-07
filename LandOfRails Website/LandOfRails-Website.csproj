@@ -9,8 +9,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\ads.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\ads.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.4.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ads.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sensitive-data">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

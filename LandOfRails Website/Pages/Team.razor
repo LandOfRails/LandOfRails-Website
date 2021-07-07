@@ -1,13 +1,15 @@
 ﻿@page "/team"
 @using Discord.WebSocket
 @using LandOfRails_Website.Services
+@using Discord
 <!-- Start: Team Boxed -->
 <section class="team-boxed">
     <div class="container">
         <!-- Start: Intro -->
         <div class="intro">
             <h2 class="text-center">Team </h2>
-            <p class="text-center">Eine Übersicht von all unseren lieben Teammitgliedern</p>
+            <p class="text-center">Eine Übersicht von all unseren lieben Teammitgliedern.</p>
+            <p class="text-center">Wir haben aktuell @teamMembers.Count Teammitglieder. Davon Online sind aktuell @(teamMembers.Count(user => user.Status != UserStatus.Offline)).</p>
         </div><!-- End: Intro -->
         <!-- Start: People -->
         <div class="row people">
