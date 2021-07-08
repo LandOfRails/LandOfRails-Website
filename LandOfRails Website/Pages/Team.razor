@@ -3,7 +3,7 @@
 @using LandOfRails_Website.Services
 @using Discord
 <!-- Start: Team Boxed -->
-<section class="team-boxed">
+<section class="team-boxed" style="background: rgb(220,223,225);">
     <div class="container">
         <!-- Start: Intro -->
         <div class="intro">
@@ -11,6 +11,7 @@
             <p class="text-center">Eine Übersicht von all unseren lieben Teammitgliedern.</p>
             <p class="text-center">Wir haben aktuell @teamMembers.Count Teammitglieder. Davon Online sind aktuell @(teamMembers.Count(user => user.Status != UserStatus.Offline)).</p>
         </div><!-- End: Intro -->
+        
         <!-- Start: People -->
         <div class="row people">
             @if (teamMembers != null)
@@ -18,8 +19,8 @@
                 @foreach (SocketGuildUser user in teamMembers)
                 {
                     <div class="col-md-6 col-lg-4 item">
-                        <div class="box">
-                            <img class="rounded-circle" src="@(string.IsNullOrWhiteSpace(user.GetAvatarUrl()) ? user.GetDefaultAvatarUrl() : user.GetAvatarUrl())">
+                        <div class="box" style="background: rgb(@GetColor(user));">
+                            <img class="rounded-circle" src="@(string.IsNullOrWhiteSpace(user.GetAvatarUrl()) ? user.GetDefaultAvatarUrl() : user.GetAvatarUrl())" alt="Discord profile picture" width="100" height="100">
                             @if (string.IsNullOrWhiteSpace(user.Nickname))
                             {
                                 <h3 class="name">@user.Username</h3>
@@ -29,10 +30,10 @@
                                 <h3 class="name">@user.Nickname</h3>
                             }
                             <p class="title">@user.Status</p>
-                            @if (user.Activity != null)
+                            @*@if (user.Activity != null)
                             {
                                 <p class="description">@user.Activity.Name</p>
-                            }
+                            }*@
                             @*<div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>*@
                         </div>
                     </div>
@@ -50,5 +51,26 @@
     {
         teamMembers = TeamHandlingService.GetTeamMembers();
         base.OnInitialized();
+    }
+
+    public string GetColor(SocketGuildUser user)
+    {
+        switch (user.Status)
+        {
+            case UserStatus.Offline:
+                return "117,123,132";
+            case UserStatus.Online:
+                return "60,159,80";
+            case UserStatus.Idle:
+                return "236,161,14";
+            case UserStatus.AFK:
+                return "236,161,14";
+            case UserStatus.DoNotDisturb:
+                return "227,72,70";
+            case UserStatus.Invisible:
+                return "117,123,132";
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }

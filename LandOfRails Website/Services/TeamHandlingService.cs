@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -34,7 +34,7 @@ namespace LandOfRails_Website.Services
 
         public void Register()
         {
-            
+
         }
 
         public static List<SocketGuildUser> GetTeamMembers()
@@ -47,6 +47,12 @@ namespace LandOfRails_Website.Services
             guildUsers.AddRange(_discord.GetGuild(394112479283904512).GetRole(TeamRTM).Members);
 
             guildUsers = guildUsers.Distinct().ToList();
+
+            List<SocketGuildUser> removeUsers = guildUsers.Where(user => user.Roles.Any(x => x.Id is 530846961012703252 or 417765243415035914)).Where(user => user.Roles.All(x => x.Id != 554029864747794573)).ToList();
+
+            foreach (SocketGuildUser user in removeUsers) guildUsers.Remove(user);
+
+            guildUsers = guildUsers.OrderByDescending(x => x.Status is UserStatus.Online or UserStatus.DoNotDisturb or UserStatus.AFK or UserStatus.Idle).ToList();
 
             return guildUsers;
         }
