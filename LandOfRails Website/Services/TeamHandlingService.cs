@@ -37,8 +37,10 @@ namespace LandOfRails_Website.Services
 
         }
 
-        public static List<SocketGuildUser> GetTeamMembers()
+        public static List<List<SocketGuildUser>> GetTeamMembers()
         {
+            List<List<SocketGuildUser>> teamMembers = new List<List<SocketGuildUser>>();
+
             List<SocketGuildUser> guildUsers = new List<SocketGuildUser>();
 
             guildUsers.AddRange(_discord.GetGuild(394112479283904512).GetRole(TeamTC).Members);
@@ -54,7 +56,12 @@ namespace LandOfRails_Website.Services
 
             guildUsers = guildUsers.OrderByDescending(x => x.Status is UserStatus.Online or UserStatus.DoNotDisturb or UserStatus.AFK or UserStatus.Idle).ToList();
 
-            return guildUsers;
+            teamMembers.Add(guildUsers.FindAll(x => x.Status is UserStatus.Online));
+            teamMembers.Add(guildUsers.FindAll(x => x.Status is UserStatus.Idle or UserStatus.AFK));
+            teamMembers.Add(guildUsers.FindAll(x => x.Status is UserStatus.DoNotDisturb));
+            teamMembers.Add(guildUsers.FindAll(x => x.Status is UserStatus.Invisible or UserStatus.Offline));
+
+            return teamMembers;
         }
     }
 }

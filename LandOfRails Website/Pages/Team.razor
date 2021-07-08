@@ -9,14 +9,13 @@
         <div class="intro">
             <h2 class="text-center">Team </h2>
             <p class="text-center">Eine Übersicht von all unseren lieben Teammitgliedern.</p>
-            <p class="text-center">Wir haben aktuell @teamMembers.Count Teammitglieder. Davon Online sind aktuell @(teamMembers.Count(user => user.Status != UserStatus.Offline)).</p>
+            <p class="text-center">Wir haben insgesamt @teamMembers.SelectMany(list => list).Count() Teammitglieder. Davon Online sind aktuell @(teamMembers.SelectMany(list => list).Count(user => user.Status != UserStatus.Offline)).</p>
         </div><!-- End: Intro -->
-        
         <!-- Start: People -->
         <div class="row people">
             @if (teamMembers != null)
             {
-                @foreach (SocketGuildUser user in teamMembers)
+                @foreach (var user in teamMembers.SelectMany(list => list))
                 {
                     <div class="col-md-6 col-lg-4 item">
                         <div class="box" style="background: rgb(@GetColor(user));">
@@ -31,9 +30,9 @@
                             }
                             <p class="title">@user.Status</p>
                             @*@if (user.Activity != null)
-                            {
-                                <p class="description">@user.Activity.Name</p>
-                            }*@
+                                    {
+                                        <p class="description">@user.Activity.Name</p>
+                                    }*@
                             @*<div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>*@
                         </div>
                     </div>
@@ -45,7 +44,7 @@
 
 @code {
 
-    List<SocketGuildUser> teamMembers;
+    List<List<SocketGuildUser>> teamMembers;
 
     protected override void OnInitialized()
     {
