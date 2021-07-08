@@ -28,7 +28,8 @@
                             {
                                 <h3 class="name">@user.Nickname</h3>
                             }
-                        <p class="title">@user.Roles.OrderByDescending(x => x.Position).First().Name | @user.Status</p>
+                        <p class="title">@user.Roles.OrderByDescending(x => x.Position).First().Name</p>
+                        <p class="title">@(user.Status == UserStatus.DoNotDisturb ? "DO NOT DISTURB" : user.Status)</p>
                             @*@if (user.Activity != null)
                                     {
                                         <p class="description">@user.Activity.Name</p>
