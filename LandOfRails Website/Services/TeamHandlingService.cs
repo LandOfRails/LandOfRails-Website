@@ -21,10 +21,10 @@ namespace LandOfRails_Website.Services
 
         private readonly ulong DeputyManagementIR = 532250985293414402;
 
-        private static readonly ulong TeamTC = 438074536508784640;
-        private static readonly ulong TeamIR = 456916096587530241;
-        private static readonly ulong TeamZND = 709848394725851211;
-        private static readonly ulong TeamRTM = 529727596942983187;
+        public static readonly ulong TeamTC = 438074536508784640;
+        public static readonly ulong TeamIR = 456916096587530241;
+        public static readonly ulong TeamZND = 709848394725851211;
+        public static readonly ulong TeamRTM = 529727596942983187;
 
         public TeamHandlingService(IServiceProvider services)
         {
@@ -37,16 +37,13 @@ namespace LandOfRails_Website.Services
 
         }
 
-        public static List<List<SocketGuildUser>> GetTeamMembers()
+        public static List<List<SocketGuildUser>> GetTeamMembers(IEnumerable<ulong> teams)
         {
             List<List<SocketGuildUser>> teamMembers = new List<List<SocketGuildUser>>();
 
             List<SocketGuildUser> guildUsers = new List<SocketGuildUser>();
 
-            guildUsers.AddRange(_discord.GetGuild(394112479283904512).GetRole(TeamTC).Members);
-            guildUsers.AddRange(_discord.GetGuild(394112479283904512).GetRole(TeamIR).Members);
-            guildUsers.AddRange(_discord.GetGuild(394112479283904512).GetRole(TeamZND).Members);
-            guildUsers.AddRange(_discord.GetGuild(394112479283904512).GetRole(TeamRTM).Members);
+            foreach (ulong team in teams) guildUsers.AddRange(_discord.GetGuild(394112479283904512).GetRole(team).Members);
 
             guildUsers = guildUsers.Distinct().ToList();
 

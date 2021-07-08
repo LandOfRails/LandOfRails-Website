@@ -9,8 +9,19 @@
         <div class="intro">
             <h2 class="text-center">Team </h2>
             <p class="text-center">Eine Übersicht von all unseren lieben Teammitgliedern.</p>
-            <p class="text-center">Wir haben insgesamt @teamMembers.SelectMany(list => list).Count() Teammitglieder. Davon Online sind aktuell @(teamMembers.SelectMany(list => list).Count(user => user.Status != UserStatus.Offline)).</p>
+            <p class="text-center">In den ausgewählten Teams haben wir insgesamt @teamMembers.SelectMany(list => list).Count() Teammitglieder. Davon Online sind aktuell @(teamMembers.SelectMany(list => list).Count(user => user.Status != UserStatus.Offline)).</p>
         </div><!-- End: Intro -->
+
+        <div class="text-center" style="text-align: center;margin-top: 10px;">
+            <RadzenSelectBar @bind-Value="@teamFilter" Multiple="true" TValue="IEnumerable<ulong>" Change="@(OnChange)">
+                <Items>
+                    <RadzenSelectBarItem Text="Traincraft" Value="TeamHandlingService.TeamTC" />
+                    <RadzenSelectBarItem Text="Immersive Railroading" Value="TeamHandlingService.TeamIR" />
+                    <RadzenSelectBarItem Text="Zora no Densha" Value="TeamHandlingService.TeamZND" />
+                    <RadzenSelectBarItem Text="Real Train Mod" Value="TeamHandlingService.TeamRTM" />
+                </Items>
+            </RadzenSelectBar>
+        </div>
         <!-- Start: People -->
         <div class="row people">
             @if (teamMembers != null)
@@ -18,7 +29,7 @@
                 @foreach (var user in teamMembers.SelectMany(list => list))
                 {
                     <div class="col-md-6 col-lg-4 item">
-                        <div class="box" style="background: rgb(@GetColor(user));">
+                        <div class="box" style="background: rgb(@GetStatusColor(user));">
                             <img class="rounded-circle" src="@(string.IsNullOrWhiteSpace(user.GetAvatarUrl()) ? user.GetDefaultAvatarUrl() : user.GetAvatarUrl())" alt="Discord profile picture" width="100" height="100">
                             @if (string.IsNullOrWhiteSpace(user.Nickname))
                             {
@@ -28,12 +39,12 @@
                             {
                                 <h3 class="name">@user.Nickname</h3>
                             }
-                        <p class="title">@user.Roles.OrderByDescending(x => x.Position).First().Name</p>
-                        <p class="title">@(user.Status == UserStatus.DoNotDisturb ? "DO NOT DISTURB" : user.Status)</p>
+                            <p class="title">@user.Roles.OrderByDescending(x => x.Position).First().Name</p>
+                            <p class="title">@(user.Status == UserStatus.DoNotDisturb ? "DO NOT DISTURB" : user.Status)</p>
                             @*@if (user.Activity != null)
-                                    {
-                                        <p class="description">@user.Activity.Name</p>
-                                    }*@
+                                {
+                                    <p class="description">@user.Activity.Name</p>
+                                }*@
                             @*<div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>*@
                         </div>
                     </div>
@@ -47,30 +58,36 @@
 
     List<List<SocketGuildUser>> teamMembers;
 
+    IEnumerable<ulong> teamFilter = new[] { TeamHandlingService.TeamTC, TeamHandlingService.TeamIR, TeamHandlingService.TeamZND, TeamHandlingService.TeamRTM };
+
     protected override void OnInitialized()
     {
-        teamMembers = TeamHandlingService.GetTeamMembers();
+        teamMembers = TeamHandlingService.GetTeamMembers(teamFilter);
         base.OnInitialized();
     }
 
-    public string GetColor(SocketGuildUser user)
+    public string GetStatusColor(SocketGuildUser user)
     {
-        switch (user.Status)
+        return user.Status switch
         {
-            case UserStatus.Offline:
-                return "117,123,132";
-            case UserStatus.Online:
-                return "60,159,80";
-            case UserStatus.Idle:
-                return "236,161,14";
-            case UserStatus.AFK:
-                return "236,161,14";
-            case UserStatus.DoNotDisturb:
-                return "227,72,70";
-            case UserStatus.Invisible:
-                return "117,123,132";
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+            UserStatus.Offline => "117,123,132",
+            UserStatus.Online => "60,159,80",
+            UserStatus.Idle => "236,161,14",
+            UserStatus.AFK => "236,161,14",
+            UserStatus.DoNotDisturb => "227,72,70",
+            UserStatus.Invisible => "117,123,132",
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
+
+    public string GetFilterColor(ulong id)
+    {
+        return teamFilter.Contains(id) ? "#d0132d" : "white";
+    }
+
+    private void OnChange(object value)
+    {
+        teamMembers = TeamHandlingService.GetTeamMembers(teamFilter);
+    }
+
 }
