@@ -61,6 +61,8 @@ namespace LandOfRails_Website.Services
             teamMembers.Add(guildUsers.FindAll(x => x.Status is UserStatus.DoNotDisturb));
             teamMembers.Add(guildUsers.FindAll(x => x.Status is UserStatus.Invisible or UserStatus.Offline));
 
+            teamMembers = teamMembers.Select(list => list.OrderByDescending(x => x.Roles.OrderByDescending(x => x.Position).First()).ToList()).ToList();
+
             return teamMembers;
         }
     }
