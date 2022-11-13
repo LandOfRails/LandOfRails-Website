@@ -13,9 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\ads.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="wwwroot\assets\bootstrap\js\bootstrap.min.js" />
     <None Include="wwwroot\assets\fonts\fa-brands-400.svg" />
     <None Include="wwwroot\assets\fonts\fa-brands-400.woff2" />
