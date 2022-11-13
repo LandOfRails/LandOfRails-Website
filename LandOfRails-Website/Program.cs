@@ -29,12 +29,13 @@ namespace LandOfRails_Website
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://localhost:5005");
                 });
 
         public async Task MainAsync(string[] args)
         {
             var token = await File.ReadAllLinesAsync("Sensitive-data");
-            await using var services = ConfigureServices();
+            await using var services = CnfigureServices();
             var client = services.GetRequiredService<DiscordSocketClient>();
 
             client.Log += LogAsync;
@@ -56,7 +57,7 @@ namespace LandOfRails_Website
             return Task.CompletedTask;
         }
 
-        private ServiceProvider ConfigureServices()
+        private ServiceProvider CnfigureServices()
         {
             return new ServiceCollection()
                 .AddSingleton<DiscordSocketClient>()

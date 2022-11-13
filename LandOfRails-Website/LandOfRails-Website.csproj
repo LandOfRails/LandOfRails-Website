@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>LandOfRails_Website</RootNamespace>
     <UserSecretsId>cc6d87c7-4843-435b-99c7-5437ab17a234</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -35,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.4.0" />
-    <PackageReference Include="Radzen.Blazor" Version="3.6.7" />
+    <PackageReference Include="Discord.Net" Version="3.8.1" />
+    <PackageReference Include="Radzen.Blazor" Version="4.3.2" />
   </ItemGroup>
 
   <ItemGroup>

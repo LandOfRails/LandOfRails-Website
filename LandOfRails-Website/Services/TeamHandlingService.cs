@@ -39,17 +39,17 @@ namespace LandOfRails_Website.Services
 
         public static List<List<SocketGuildUser>> GetTeamMembers(IEnumerable<ulong> teams)
         {
-            List<List<SocketGuildUser>> teamMembers = new List<List<SocketGuildUser>>();
+            var teamMembers = new List<List<SocketGuildUser>>();
 
-            List<SocketGuildUser> guildUsers = new List<SocketGuildUser>();
+            var guildUsers = new List<SocketGuildUser>();
 
-            foreach (ulong team in teams) guildUsers.AddRange(_discord.GetGuild(394112479283904512).GetRole(team).Members);
+            foreach (var team in teams) guildUsers.AddRange(_discord.GetGuild(394112479283904512).GetRole(team).Members);
 
             guildUsers = guildUsers.Distinct().ToList();
 
-            List<SocketGuildUser> removeUsers = guildUsers.Where(user => user.Roles.Any(x => x.Id is 530846961012703252 or 417765243415035914)).Where(user => user.Roles.All(x => x.Id != 554029864747794573)).ToList();
+            var removeUsers = guildUsers.Where(user => user.Roles.Any(x => x.Id is 530846961012703252 or 417765243415035914)).Where(user => user.Roles.All(x => x.Id != 554029864747794573)).ToList();
 
-            foreach (SocketGuildUser user in removeUsers) guildUsers.Remove(user);
+            foreach (var user in removeUsers) guildUsers.Remove(user);
 
             guildUsers = guildUsers.OrderByDescending(x => x.Status is UserStatus.Online or UserStatus.DoNotDisturb or UserStatus.AFK or UserStatus.Idle).ToList();
 
