@@ -39,6 +39,8 @@ namespace LandOfRails_Website.Services
 
         public static List<List<SocketGuildUser>> GetTeamMembers(IEnumerable<ulong> teams)
         {
+            _discord.DownloadUsersAsync(new[] { _discord.GetGuild(394112479283904512) });
+
             var teamMembers = new List<List<SocketGuildUser>>();
 
             var guildUsers = new List<SocketGuildUser>();
