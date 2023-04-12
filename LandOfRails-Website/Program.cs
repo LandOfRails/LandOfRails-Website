@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using LandOfRails_Website.Models;
 using LandOfRails_Website.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace LandOfRails_Website
 {
@@ -24,6 +26,12 @@ namespace LandOfRails_Website
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureServices(collection =>
+                    {
+                        var serverVersion = new MariaDbServerVersion(new Version(10, 6, 12));
+                        collection.AddDbContextFactory<landofrails_websiteContext>(options =>
+                            options.UseMySql($"server=landofrails.net;uid=landofrails_website;pwd={File.ReadAllLines("Sensitive-data")[1]};database=landofrails_website", serverVersion));
+                    });
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseUrls("http://localhost:5005");
                 });
@@ -37,7 +45,6 @@ namespace LandOfRails_Website
             client.Log += LogAsync;
             services.GetRequiredService<CommandService>().Log += LogAsync;
 
-            client.PurgeUserCache();
             await client.LoginAsync(TokenType.Bot, token[0]);
             await client.StartAsync();
 

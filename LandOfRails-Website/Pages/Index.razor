@@ -119,11 +119,11 @@
 
     protected override void OnInitialized()
     {
-        yearsOld = Years(new DateTime(2015, 3, 19), DateTime.Now);
+        yearsOld = Years(new(2015, 3, 19), DateTime.Now);
         base.OnInitialized();
     }
 
-    int Years(DateTime start, DateTime end)
+    static int Years(DateTime start, DateTime end)
     {
         return (end.Year - start.Year - 1) +
                (((end.Month > start.Month) ||
