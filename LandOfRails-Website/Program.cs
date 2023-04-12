@@ -49,6 +49,7 @@ namespace LandOfRails_Website
             await client.StartAsync();
 
             services.GetRequiredService<TeamHandlingService>().Register();
+            services.GetRequiredService<CommandHandlingService>().Register();
 
             await CreateHostBuilder(args).Build().RunAsync();
             await Task.Delay(Timeout.Infinite);
@@ -67,6 +68,7 @@ namespace LandOfRails_Website
                 .AddSingleton<DiscordSocketClient>()
                 .AddSingleton<CommandService>()
                 .AddSingleton<TeamHandlingService>()
+                .AddSingleton<CommandHandlingService>()
                 .AddSingleton<HttpClient>()
                 .BuildServiceProvider();
         }
