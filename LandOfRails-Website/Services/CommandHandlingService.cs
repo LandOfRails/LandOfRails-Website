@@ -40,18 +40,18 @@ namespace LandOfRails_Website.Services
                 .WithDescription("Adds a download entry to the website")
                 .AddOption("title", ApplicationCommandOptionType.String, "Title of the world", true)
                 .AddOption("description", ApplicationCommandOptionType.String, "Description of the world", false)
-                .AddOption("downloadlink", ApplicationCommandOptionType.String, "DIRECT download link to the world", true)
-                .AddOption("backgroundimagelink", ApplicationCommandOptionType.String, "Link to an image of e.g. the world for the background", false)
+                .AddOption("downloadlink", ApplicationCommandOptionType.String, "DIRECT download link to the world",
+                    true)
+                .AddOption("backgroundimagelink", ApplicationCommandOptionType.String,
+                    "Link to an image of e.g. the world for the background", false)
                 .WithDMPermission(false)
-                .WithDefaultMemberPermissions(GuildPermission.SendTTSMessages)
-                .WithDefaultPermission(true);
+                .WithDefaultMemberPermissions(GuildPermission.SendTTSMessages);
             var removeCommand = new SlashCommandBuilder()
                 .WithName("remove-download")
                 .WithDescription("Removes a download entry to the website")
                 .AddOption("title", ApplicationCommandOptionType.String, "Exact title given to the world", true)
                 .WithDMPermission(false)
-                .WithDefaultMemberPermissions(GuildPermission.SendTTSMessages)
-                .WithDefaultPermission(true);
+                .WithDefaultMemberPermissions(GuildPermission.SendTTSMessages);
 
             try
             {
