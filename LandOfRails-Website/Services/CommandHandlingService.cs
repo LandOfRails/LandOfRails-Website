@@ -44,14 +44,12 @@ namespace LandOfRails_Website.Services
                     true)
                 .AddOption("backgroundimagelink", ApplicationCommandOptionType.String,
                     "Link to an image of e.g. the world for the background", false)
-                .WithDefaultPermission(true)
-                .WithDefaultMemberPermissions(GuildPermission.SendTTSMessages);
+                .WithDMPermission(false);
             var removeCommand = new SlashCommandBuilder()
                 .WithName("remove-download")
                 .WithDescription("Removes a download entry to the website")
                 .AddOption("title", ApplicationCommandOptionType.String, "Exact title given to the world", true)
-                .WithDefaultPermission(true)
-                .WithDefaultMemberPermissions(GuildPermission.SendTTSMessages);
+                .WithDMPermission(false);
 
             try
             {
