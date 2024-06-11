@@ -33,7 +33,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 8.0.x
       - name: Install dependencies
         run: dotnet restore
       - name: Build
@@ -43,6 +43,6 @@ jobs:
           dotnet publish -c Release
         
       - name: Deploy with rsync
-        run: rsync -avz -e 'ssh -p 4556 -o StrictHostKeyChecking=no' LandOfRails-Website/bin/Release/net6.0/publish/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/landofrails/
+        run: rsync -avz -e 'ssh -p 4556 -o StrictHostKeyChecking=no' LandOfRails-Website/bin/Release/net8.0/publish/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/landofrails/
       - name: Restart LandOfRails
         run: ssh -p 4556 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'service landofrails restart'
