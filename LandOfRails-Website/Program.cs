@@ -1,17 +1,17 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using LandOfRails_Website.Models;
 using LandOfRails_Website.Services;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace LandOfRails_Website
 {
@@ -26,26 +26,29 @@ namespace LandOfRails_Website
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.ConfigureServices(collection =>
+                    webBuilder.ConfigureServices((hostContext, services) =>
                     {
-                        var serverVersion = new MariaDbServerVersion(new Version(10, 6, 12));
-                        collection.AddDbContextFactory<landofrails_websiteContext>(options =>
-                            options.UseMySql($"server=landofrails.net;uid=landofrails_website;pwd={File.ReadAllLines("Sensitive-data")[1]};database=landofrails_website", serverVersion));
+                        var configuration = hostContext.Configuration;
+                        var connectionString = configuration.GetConnectionString("lor_websiteConnection");
+
+                        services.AddDbContextFactory<landofrails_websiteContext>(options =>
+                            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
                     });
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://localhost:5005");
                 });
 
         public async Task MainAsync(string[] args)
         {
-            var token = await File.ReadAllLinesAsync("Sensitive-data");
             await using var services = CnfigureServices();
             var client = services.GetRequiredService<DiscordSocketClient>();
+            var host = CreateHostBuilder(args).Build();
+            var hostServices = host.Services;
+            var configuration = hostServices.GetRequiredService<IConfiguration>();
 
             client.Log += LogAsync;
             services.GetRequiredService<CommandService>().Log += LogAsync;
 
-            await client.LoginAsync(TokenType.Bot, token[0]);
+            await client.LoginAsync(TokenType.Bot, configuration["DiscordBot:Token"]);
             await client.StartAsync();
 
             services.GetRequiredService<TeamHandlingService>().Register();
